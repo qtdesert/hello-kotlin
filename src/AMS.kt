@@ -1,8 +1,7 @@
 import java.util.*
 
 fun main(args: Array<String>) {
-    println("Hello, world!")
-    dayOfWeek()
+    println("Hello, ${args[0]}!")
 }
 
 fun dayOfWeek() {
