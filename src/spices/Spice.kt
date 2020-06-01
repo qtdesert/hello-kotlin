@@ -9,6 +9,13 @@ fun delegate() {
     println(curry.color)
 
     fun makeSpicyCurry() = Curry("Spicy curry", spiciness = "spicy")
+
+    val spiceCabinet = listOf(
+            SpiceContainer(Curry("Yellow Curry", "mild")),
+            SpiceContainer(Curry("Red Curry", "medium")),
+            SpiceContainer(Curry("Green Curry", "spicy")))
+
+    for (element in spiceCabinet) println(element.label)
 }
 
 abstract class Spice(val name: String, val spiciness: String = "mild", color: SpiceColor): SpiceColor by color {
@@ -58,4 +65,8 @@ class Curry(name: String, spiciness: String, color: SpiceColor = YellowSpiceColo
     override fun grind() {
         println("Grinding $spiciness $name")
     }
+}
+
+data class SpiceContainer(val spice: Spice) {
+    val label = spice.name
 }
