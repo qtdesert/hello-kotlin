@@ -25,3 +25,21 @@ class TowerTank() : Aquarium() {
         get() = (width * height * length / 1000 * PI).toInt()
         set(value) {height = (value * 1000) / (width * length)}
 }
+
+enum class Color(val rgb: Int) {
+    RED(0xFF0000),
+    GREEN(0x00FF00),
+    BLUE(0x0000FF)
+}
+
+sealed class Seal
+
+object SeaLion : Seal()
+object Walrus : Seal()
+
+fun matchSeal(seal: Seal): String {
+    return when(seal) {
+        is Walrus -> "walrus"
+        is SeaLion -> "sea lion"
+    }
+}

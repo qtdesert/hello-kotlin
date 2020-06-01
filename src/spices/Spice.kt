@@ -18,8 +18,8 @@ fun delegate() {
     for (element in spiceCabinet) println(element.label)
 }
 
-abstract class Spice(val name: String, val spiciness: String = "mild", color: SpiceColor): SpiceColor by color {
-    var heat: Int
+sealed class Spice(val name: String, val spiciness: String = "mild", color: SpiceColor): SpiceColor by color {
+    private var heat: Int
         get() {
             return when(spiciness) {
                 "mild" -> 1
@@ -46,11 +46,11 @@ interface Grinder {
 }
 
 interface SpiceColor {
-    val color: String
+    val color: Color
 }
 
 object YellowSpiceColor: SpiceColor {
-    override val color = "yellow"
+    override val color = Color.YELLOW
 }
 
 class Curry(name: String, spiciness: String, color: SpiceColor = YellowSpiceColor):
@@ -69,4 +69,8 @@ class Curry(name: String, spiciness: String, color: SpiceColor = YellowSpiceColo
 
 data class SpiceContainer(val spice: Spice) {
     val label = spice.name
+}
+
+enum class Color(val rgb: Int) {
+    RED(0xFF0000), GREEN(0x00FF00), BLUE(0x0000FF), YELLOW(0xFFFF00);
 }
