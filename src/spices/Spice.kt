@@ -18,10 +18,10 @@ fun delegate() {
     for (element in spiceCabinet) println(element.label)
 }
 
-sealed class Spice(val name: String, val spiciness: String = "mild", color: SpiceColor): SpiceColor by color {
+sealed class Spice(val name: String, val spiciness: String = "mild", color: SpiceColor) : SpiceColor by color {
     private var heat: Int
         get() {
-            return when(spiciness) {
+            return when (spiciness) {
                 "mild" -> 1
                 "medium" -> 3
                 "spicy" -> 5
@@ -53,7 +53,7 @@ object YellowSpiceColor: SpiceColor {
     override val color = Color.YELLOW
 }
 
-class Curry(name: String, spiciness: String, color: SpiceColor = YellowSpiceColor):
+class Curry(name: String, spiciness: String, color: SpiceColor = YellowSpiceColor) :
         Spice(name, spiciness, color),
         Grinder {
 
