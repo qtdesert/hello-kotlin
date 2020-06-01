@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
     println("Name: ${mySimpleSpice.name}")
     println("Spiciness: ${mySimpleSpice.spiciness}")
     println("Heat: ${mySimpleSpice.heat}")
-    
+
 
     val spices1 = listOf(
             Spice("curry", "mild"),
