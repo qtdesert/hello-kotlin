@@ -1,5 +1,5 @@
 // https://www.raywenderlich.com/3634394-kotlin-generics-tutorial-getting-started
-package zoo
+package animals
 
 enum class FurColor(val color: String) {
     BLACK("black"), BROWN("brown"), WHITE("white"), RED("red")
