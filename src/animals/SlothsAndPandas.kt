@@ -1,4 +1,6 @@
-// https://medium.com/kotlin-thursdays/introduction-to-kotlin-generics-9d18d3719e1d
+// 1- https://medium.com/kotlin-thursdays/introduction-to-kotlin-generics-9d18d3719e1d
+// 2- https://medium.com/kotlin-thursdays/introduction-to-kotlin-generics-part-2-9428963bb96b
+// 3- https://medium.com/kotlin-thursdays/introduction-to-kotlin-generics-reified-generic-parameters-7643f53ba513
 package animals
 
 import kotlin.random.Random
@@ -68,6 +70,61 @@ fun feedCrew(crew: List<Mammal>) {
     }
 }
 
+fun <T: Mammal> printAnimalResultFiltered(
+        clazz: Class<T>,
+        list: List<Mammal>,
+        factCheck: Mammal.() -> Int
+): List<Mammal> {
+    if (list.isNotEmpty()) {
+        list.forEach {
+            if (clazz.isInstance(it) ) {
+                println("-- ${it.javaClass.name} - ${it.factCheck()}")
+            }
+        }
+    }
+    return list
+}
+
+// Inline reified version (much better)
+inline fun <reified T: Mammal> printAnimalResultFiltered(
+        list: List<Mammal>,
+        factCheck: Mammal.() -> Int
+): List<Mammal> {
+    if (list.isNotEmpty()) {
+        list.filterIsInstance<T>().forEach {
+            println("-- ${it.javaClass.name} - ${it.factCheck()}")
+        }
+    }
+    return list
+}
+
+// And now, as a List extension function:
+fun <T: Mammal> List<Mammal>.printAnimalResultsExtensionFiltered(
+        clazz: Class<T>,
+        factCheck: Mammal.() -> Int
+): List<Mammal> {
+    if (this.isNotEmpty()) {
+        this.filter { clazz.isInstance(it) }
+                .forEach {
+                    println("${it.javaClass.name} - ${it.factCheck()}")
+                }
+    }
+    return this
+}
+
+// And, best of all, the reified version of the extension function:
+inline fun <reified T: Mammal> List<Mammal>.printAnimalResultsExtensionFiltered(
+        factCheck: Mammal.() -> Int
+): List<Mammal> {
+    if (this.isNotEmpty()) {
+        this.filterIsInstance<T>()
+                .forEach {
+                    println("${it.javaClass.name} - ${it.factCheck()}")
+                }
+    }
+    return this
+}
+
 fun main() {
     val sloth: Sloth
 
@@ -97,11 +154,23 @@ fun main() {
             Manatee("Manny")
     )
 
-    crewCrewCrew.forEach {
-        mammalFactCheck(it, Mammal::vertebraeCount)
-        mammalFactCheck(it, Mammal::knownSpeciesCount)
-//        mammalFactCheck(it, Mammal::isEndangered) // Doesn't work: Be careful of your types
-    }
+//    crewCrewCrew.filterIsInstance<Sloth>().forEach {
+//        mammalFactCheck(it, Mammal::vertebraeCount)
+//        mammalFactCheck(it, Mammal::knownSpeciesCount)
+////        mammalFactCheck(it, Mammal::isEndangered) // Doesn't work: Be careful of your types
+//        println("-- ${it.javaClass.name} - ${mammalFactCheck(it, Mammal::knownSpeciesCount)}")
+//    }
+    // Instead we do:
+    printAnimalResultFiltered(Sloth::class.java, crewCrewCrew, Mammal::knownSpeciesCount)
+    // And even better (with inline and reified):
+    printAnimalResultFiltered<Sloth>(crewCrewCrew, Mammal::knownSpeciesCount)
+
+    // And even, even better, with the extension function:
+    println("\nSpecies count with list extension function:")
+    crewCrewCrew.printAnimalResultsExtensionFiltered(Sloth::class.java, Mammal::knownSpeciesCount)
+    // And the reified version (the best of all):
+    println("\nSpecies count with list extension function reified:")
+    crewCrewCrew.printAnimalResultsExtensionFiltered<Sloth>(Mammal::knownSpeciesCount)
 
     val compareByNames = Comparator { a: Mammal, b: Mammal ->
         a.name.first().toInt() - b.name.first().toInt()
