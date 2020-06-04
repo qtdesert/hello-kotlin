@@ -1,3 +1,4 @@
+// https://medium.com/kotlin-thursdays/introduction-to-kotlin-generics-9d18d3719e1d
 package animals
 
 open class Mammal(val name: String) {
