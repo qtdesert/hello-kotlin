@@ -1,7 +1,5 @@
 package aquarium5
 
-import aquarium.num
-
 data class Fish (var name: String)
 
 fun main(args: Array<String>) {
